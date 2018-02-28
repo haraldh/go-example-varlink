@@ -1,9 +1,9 @@
 package main
 
-//go:generate go generate ../go-varlink
+//go:generate go generate github.com/varlink/go-varlink
 
 import (
-	"../go-varlink"
+	"github.com/varlink/go-varlink"
 	"os"
 )
 
