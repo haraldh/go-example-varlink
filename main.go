@@ -1,8 +1,11 @@
 package main
 
+//go:generate go generate github.com/varlink/go-varlink
+
 import (
-	"github.com/varlink/go-varlink"
 	"os"
+
+	"github.com/varlink/go-varlink"
 )
 
 func main() {
