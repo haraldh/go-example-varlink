@@ -1,12 +1,12 @@
 package main
 
-//go:generate go generate github.com/varlink/go-varlink
-//go:generate $GOPATH/bin/varlink-go-generator main ./org.varlink.example.more.varlink
+//go:generate $GOPATH/bin/varlink-generator main ./org.varlink.example.more.varlink
 
 import (
-	"github.com/varlink/go-varlink"
-	"os"
 	"fmt"
+	"os"
+
+	"github.com/varlink/go-varlink"
 )
 
 func help(name string) {
@@ -31,5 +31,8 @@ func main() {
 		help(os.Args[0])
 	}
 
-	service.Run(os.Args[1])
+	err := service.Run(os.Args[1])
+	if err != nil {
+		os.Exit(1)
+	}
 }
