@@ -1,8 +1,8 @@
 all:
-	@( cd $$GOPATH/src/github.com/varlink/go-varlink; go generate )
-	@go build
+	@go generate github.com/varlink/go-varlink
+	@go build -o service
 .PHONY: all
 
 clean:
-	rm -f go-example
+	rm -f service
 .PHONY: clean
