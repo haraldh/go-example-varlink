@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	ifaces := []varlink.VarlinkInterface{
+	ifaces := []varlink.Interface{
 		// list own interface here
 	}
 	service := varlink.NewService(
