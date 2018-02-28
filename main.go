@@ -1,7 +1,7 @@
 package main
 
 //go:generate go generate github.com/varlink/go-varlink
-//go:generate varlink-go-generator main ./org.varlink.example.more.varlink
+//go:generate $GOPATH/bin/varlink-go-generator main ./org.varlink.example.more.varlink
 
 import (
 	"github.com/varlink/go-varlink"
