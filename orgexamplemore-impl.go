@@ -53,10 +53,8 @@ func Ping(iface *varlink.Interface, call varlink.ServerCall, out *varlink.Writer
 		return varlink.InvalidParameter("parameters", out)
 	}
 
-    // FIXME: Fill me in
-
 	retval := Ping_ReplyParameters{
-		// FIXME: Fill me in
+		in.Ping,
 	}
 
 	return out.Reply(varlink.ServerReply{
