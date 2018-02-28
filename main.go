@@ -21,9 +21,9 @@ func main() {
 	}
 	service := varlink.NewService(
 		"Varlink",
-		"Varlink Examples",
+		"Example",
 		"1",
-		"https://varlink.org",
+		"https://github.com/haraldh/go-varlink-example",
 		ifaces,
 	)
 
