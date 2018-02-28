@@ -1,6 +1,6 @@
 package main
 
-//go:generate $GOPATH/bin/varlink-generator main ./org.varlink.example.more.varlink
+//go:generate $GOPATH/bin/varlink-generator main ./org.example.more.varlink
 
 import (
 	"fmt"
@@ -15,7 +15,7 @@ func help(name string) {
 }
 
 func main() {
-	fmt.Println(OrgVarlinkExampleMore)
+	fmt.Println(OrgExampleMore)
 	ifaces := []varlink.Interface{
 		// list own interface here
 	}
