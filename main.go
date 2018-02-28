@@ -4,9 +4,8 @@ package main
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/varlink/go-varlink"
+	"os"
 )
 
 func help(name string) {
@@ -15,15 +14,16 @@ func help(name string) {
 }
 
 func main() {
-	fmt.Println(OrgExampleMore)
+	myservice := NewService()
+	fmt.Println(myservice.Get().Description)
 	ifaces := []varlink.Interface{
-		// list own interface here
+		myservice,
 	}
 	service := varlink.NewService(
-		"Atomic",
-		"podman",
-		"0.5",
-		"https://github.com/projectatomic/libpod",
+		"Varlink",
+		"Varlink Examples",
+		"1",
+		"https://varlink.org",
 		ifaces,
 	)
 
