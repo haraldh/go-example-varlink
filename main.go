@@ -3,19 +3,17 @@ package main
 //go:generate go generate github.com/varlink/go-varlink
 
 import (
-	"os"
-
 	"github.com/varlink/go-varlink"
+	"os"
 )
 
 func main() {
 	var service = varlink.NewService(
-		&varlink.ServiceInfo{
-			"Atomic",
-			"podman",
-			"0.5",
-			"https://github.com/projectatomic/libpod",
-		})
+		"Atomic",
+		"podman",
+		"0.5",
+		"https://github.com/projectatomic/libpod",
+	)
 
 	// Register a new interface
 	// myiface = StructWithVarlinkInterface {...}
