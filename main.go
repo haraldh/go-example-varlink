@@ -8,17 +8,16 @@ import (
 )
 
 func main() {
+	ifaces := []varlink.VarlinkInterface{
+		// list own interface here
+	}
 	service := varlink.NewService(
 		"Atomic",
 		"podman",
 		"0.5",
 		"https://github.com/projectatomic/libpod",
-		[]varlink.VarlinkInterface{},
+		ifaces,
 	)
-
-	// Register a new interface
-	// myiface = StructWithVarlinkInterface {...}
-	//service.RegisterInterface(VarlinkInterface(myiface))
 
 	service.Run(os.Args[1])
 }
