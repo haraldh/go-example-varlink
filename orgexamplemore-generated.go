@@ -32,13 +32,9 @@ type StopServing_CallParameters struct {
 type StopServing_ReplyParameters struct {
 }
 
-func (this Service) Get() *varlink.InterfaceImpl {
-	return &this.myservice
-}
-
 func NewService() Service {
 	r := Service{
-		myservice: varlink.InterfaceImpl{
+		InterfaceImpl: varlink.InterfaceImpl{
 			Name: "org.example.more",
 			Description: `# Example Varlink service
 interface org.example.more
@@ -64,11 +60,6 @@ method StopServing() -> ()
 # Something failed
 error ActionFailed (reason: string)
 `,
-			Methods: map[string]varlink.Method{
-				"Ping":        Ping,
-				"TestMore":    TestMore,
-				"StopServing": StopServing,
-			},
 		},
 	}
 	return r

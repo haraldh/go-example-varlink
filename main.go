@@ -15,21 +15,20 @@ func help(name string) {
 
 func main() {
 	myservice := NewService()
-	fmt.Println(myservice.Get().Description)
-	ifaces := []varlink.Interface{
-		myservice,
-	}
 	service := varlink.NewService(
 		"Varlink",
 		"Example",
 		"1",
 		"https://github.com/haraldh/go-varlink-example",
-		ifaces,
+		[]varlink.Interface{
+			&myservice,
+		},
 	)
 
 	if len(os.Args) < 2 {
 		help(os.Args[0])
 	}
+	myservice.server = &service
 
 	err := service.Run(os.Args[1])
 	if err != nil {
