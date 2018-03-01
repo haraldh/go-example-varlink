@@ -27,6 +27,7 @@ func main() {
 	if len(os.Args) < 2 {
 		help(os.Args[0])
 	}
+
 	// fill in extra data, for the StopServing() method
 	orgexamplemoreservice.Server = &service
 

@@ -11,7 +11,7 @@ type Service struct {
 }
 
 func (this *Service) TestMore(call varlink.ServerCall, out *varlink.Writer) error {
-	var in TestMore_CallParameters
+	var in TestMore_In
 	err := json.Unmarshal(*call.Parameters, &in)
 	if err != nil {
 		return varlink.InvalidParameter("parameters", out)
@@ -19,7 +19,7 @@ func (this *Service) TestMore(call varlink.ServerCall, out *varlink.Writer) erro
 
 	// FIXME: Fill me in
 
-	retval := TestMore_ReplyParameters{
+	retval := TestMore_Out{
 		// FIXME: Fill me in
 	}
 
@@ -36,7 +36,7 @@ func (this *Service) StopServing(call varlink.ServerCall, out *varlink.Writer) e
 }
 
 func (this *Service) Ping(call varlink.ServerCall, out *varlink.Writer) error {
-	var in Ping_CallParameters
+	var in Ping_In
 	if call.Parameters == nil {
 		return varlink.InvalidParameter("parameters", out)
 	}
@@ -46,11 +46,33 @@ func (this *Service) Ping(call varlink.ServerCall, out *varlink.Writer) error {
 		return varlink.InvalidParameter("parameters", out)
 	}
 
-	retval := Ping_ReplyParameters{
+	retval := Ping_Out{
 		in.Ping,
 	}
 
 	return out.Reply(varlink.ServerReply{
 		Parameters: retval,
 	})
+}
+
+func (this *Service) Handle(method string, call varlink.ServerCall, out *varlink.Writer) error {
+	switch method {
+	case "Ping":
+		return this.Ping(call, out)
+	case "TestMore":
+		return this.TestMore(call, out)
+	case "StopServing":
+		return this.StopServing(call, out)
+	}
+	return varlink.MethodNotFound(method, out)
+}
+
+func NewService() Service {
+	r := Service{
+		InterfaceImpl: varlink.InterfaceImpl{
+			Name: "org.example.more",
+			Description: Description,
+		},
+	}
+	return r
 }
