@@ -71,7 +71,7 @@ func NewService() Service {
 	r := Service{
 		InterfaceImpl: varlink.InterfaceImpl{
 			Name: "org.example.more",
-			Description: Description,
+			Description: InterfaceDescription,
 		},
 	}
 	return r
