@@ -1,4 +1,4 @@
-package main
+package orgexamplemore
 
 import (
 	"github.com/varlink/go-varlink"
@@ -63,4 +63,16 @@ error ActionFailed (reason: string)
 		},
 	}
 	return r
+}
+
+func (this *Service) Handle(method string, call varlink.ServerCall, out *varlink.Writer) error {
+	switch method {
+	case "Ping":
+		return this.Ping(call, out)
+	case "TestMore":
+		return this.TestMore(call, out)
+	case "StopServing":
+		return this.StopServing(call, out)
+	}
+	return varlink.MethodNotFound(method, out)
 }

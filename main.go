@@ -1,11 +1,10 @@
 package main
 
-//go:generate $GOPATH/bin/varlink-generator main ./org.example.more.varlink
-
 import (
 	"fmt"
 	"github.com/varlink/go-varlink"
 	"os"
+	"github.com/haraldh/go-varlink-example/orgexamplemore"
 )
 
 func help(name string) {
@@ -14,7 +13,7 @@ func help(name string) {
 }
 
 func main() {
-	myservice := NewService()
+	myservice := orgexamplemore.NewService()
 	service := varlink.NewService(
 		"Varlink",
 		"Example",
@@ -28,7 +27,7 @@ func main() {
 	if len(os.Args) < 2 {
 		help(os.Args[0])
 	}
-	myservice.server = &service
+	myservice.Server = &service
 
 	err := service.Run(os.Args[1])
 	if err != nil {
