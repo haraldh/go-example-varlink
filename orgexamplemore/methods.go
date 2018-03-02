@@ -3,7 +3,6 @@ package orgexamplemore
 //go:generate $GOPATH/bin/varlink-generator ./org.example.more.varlink
 
 import (
-	"encoding/json"
 	"github.com/varlink/go-varlink"
 )
 
@@ -16,42 +15,39 @@ func NewInterface() Interface {
 	return Interface{InterfaceDefinition: NewInterfaceDefinition()}
 }
 
-func (this *Interface) TestMore(call *varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) TestMore(ctx varlink.Context) error {
 	var in TestMore_In
-	err := json.Unmarshal(*call.Parameters, &in)
+	err := ctx.Arguments(&in)
 	if err != nil {
-		return varlink.InvalidParameter("parameters", out)
+		return varlink.InvalidParameter(ctx, "parameters")
 	}
 
 	// FIXME: Fill me in
-	return varlink.MethodNotImplemented("TestMore", out)
+	return varlink.MethodNotImplemented(ctx, "TestMore")
 
-	return out.Reply(varlink.ServerReply{
+	return ctx.Reply(&varlink.ServerReply{
 		Parameters: TestMore_Out{
 			// FIXME: Fill me in
 		},
 	})
 }
 
-func (this *Interface) StopServing(call *varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) StopServing(ctx varlink.Context) error {
 	if this.Server != nil {
 		this.Server.Stop()
 	}
-	return out.Reply(varlink.ServerReply{})
+	return ctx.Reply(&varlink.ServerReply{})
 }
 
-func (this *Interface) Ping(call *varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) Ping(ctx varlink.Context) error {
 	var in Ping_In
-	if call.Parameters == nil {
-		return varlink.InvalidParameter("parameters", out)
-	}
 
-	err := json.Unmarshal(*call.Parameters, &in)
+	err := ctx.Arguments(&in)
 	if err != nil {
-		return varlink.InvalidParameter("parameters", out)
+		return varlink.InvalidParameter(ctx, "parameters")
 	}
 
-	return out.Reply(varlink.ServerReply{
+	return ctx.Reply(&varlink.ServerReply{
 		Parameters: Ping_Out{
 			in.Ping,
 		},
