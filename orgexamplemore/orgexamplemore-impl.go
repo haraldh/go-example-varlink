@@ -20,12 +20,10 @@ func (this *Interface) TestMore(call varlink.ServerCall, out *varlink.Writer) er
 	// FIXME: Fill me in
 	return varlink.MethodNotImplemented("TestMore", out)
 
-	retval := TestMore_Out{
-		// FIXME: Fill me in
-	}
-
 	return out.Reply(varlink.ServerReply{
-		Parameters: retval,
+		Parameters: TestMore_Out{
+			// FIXME: Fill me in
+		},
 	})
 }
 
@@ -47,12 +45,10 @@ func (this *Interface) Ping(call varlink.ServerCall, out *varlink.Writer) error 
 		return varlink.InvalidParameter("parameters", out)
 	}
 
-	retval := Ping_Out{
-		in.Ping,
-	}
-
 	return out.Reply(varlink.ServerReply{
-		Parameters: retval,
+		Parameters: Ping_Out{
+			in.Ping,
+		},
 	})
 }
 
