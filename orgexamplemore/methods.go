@@ -1,5 +1,7 @@
 package orgexamplemore
 
+//go:generate $GOPATH/bin/varlink-generator ./org.example.more.varlink
+
 import (
 	"encoding/json"
 	"github.com/varlink/go-varlink"
