@@ -13,14 +13,14 @@ func help(name string) {
 }
 
 func main() {
-	orgexamplemoreservice := orgexamplemore.NewService()
+	orgexamplemoreiface := orgexamplemore.NewInterface()
 	service := varlink.NewService(
 		"Varlink",
 		"Example",
 		"1",
 		"https://github.com/haraldh/go-varlink-example",
 		[]varlink.Interface{
-			&orgexamplemoreservice,
+			&orgexamplemoreiface,
 		},
 	)
 
@@ -29,7 +29,7 @@ func main() {
 	}
 
 	// fill in extra data, for the StopServing() method
-	orgexamplemoreservice.Server = &service
+	orgexamplemoreiface.Server = &service
 
 	err := service.Run(os.Args[1])
 	if err != nil {

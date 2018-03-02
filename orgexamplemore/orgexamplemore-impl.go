@@ -6,12 +6,12 @@ import (
 	"reflect"
 )
 
-type Service struct {
-	varlink.InterfaceImpl
+type Interface struct {
+	varlink.InterfaceDefinition
 	Server *varlink.Service
 }
 
-func (this *Service) TestMore(call varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) TestMore(call varlink.ServerCall, out *varlink.Writer) error {
 	var in TestMore_In
 	err := json.Unmarshal(*call.Parameters, &in)
 	if err != nil {
@@ -30,14 +30,14 @@ func (this *Service) TestMore(call varlink.ServerCall, out *varlink.Writer) erro
 	})
 }
 
-func (this *Service) StopServing(call varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) StopServing(call varlink.ServerCall, out *varlink.Writer) error {
 	if this.Server != nil {
 		this.Server.Stop()
 	}
 	return out.Reply(varlink.ServerReply{})
 }
 
-func (this *Service) Ping(call varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) Ping(call varlink.ServerCall, out *varlink.Writer) error {
 	var in Ping_In
 	if call.Parameters == nil {
 		return varlink.InvalidParameter("parameters", out)
@@ -57,7 +57,19 @@ func (this *Service) Ping(call varlink.ServerCall, out *varlink.Writer) error {
 	})
 }
 
-func (this *Service) Handle(method string, call varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) HandleOld(method string, call varlink.ServerCall, out *varlink.Writer) error {
+	switch method {
+	case "Ping":
+		return this.Ping(call, out)
+	case "StopServing":
+		return this.StopServing(call, out)
+	case "TestMore":
+		return this.TestMore(call, out)
+	}
+	return varlink.MethodNotFound(method, out)
+}
+
+func (this *Interface) Handle(method string, call varlink.ServerCall, out *varlink.Writer) error {
 	// MethodByName() returns 'zero Kind' for unknown methods
 	v := reflect.ValueOf(this).MethodByName(method)
 	if v.Kind() != reflect.Func {
@@ -77,9 +89,9 @@ func (this *Service) Handle(method string, call varlink.ServerCall, out *varlink
 	return ret[0].Interface().(error)
 }
 
-func NewService() Service {
-	r := Service{
-		InterfaceImpl: varlink.InterfaceImpl{
+func NewInterface() Interface {
+	r := Interface{
+		InterfaceDefinition: varlink.InterfaceDefinition{
 			Name:        "org.example.more",
 			Description: InterfaceDescription,
 			Methods:     []string{"Ping", "StopServing", "TestMore"},
