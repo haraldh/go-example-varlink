@@ -17,7 +17,7 @@ func NewInterface() Interface {
 
 func (this *Interface) TestMore(ctx varlink.Context) error {
 	var in TestMore_In
-	err := ctx.Arguments(&in)
+	err := ctx.Args(&in)
 	if err != nil {
 		return varlink.InvalidParameter(ctx, "parameters")
 	}
@@ -42,7 +42,7 @@ func (this *Interface) StopServing(ctx varlink.Context) error {
 func (this *Interface) Ping(ctx varlink.Context) error {
 	var in Ping_In
 
-	err := ctx.Arguments(&in)
+	err := ctx.Args(&in)
 	if err != nil {
 		return varlink.InvalidParameter(ctx, "parameters")
 	}
