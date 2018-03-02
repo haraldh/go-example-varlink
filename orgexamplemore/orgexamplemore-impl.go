@@ -53,7 +53,5 @@ func (this *Interface) Ping(call varlink.ServerCall, out *varlink.Writer) error 
 }
 
 func NewInterface() Interface {
-	r := Interface{InterfaceDefinition: NewInterfaceDefinition()}
-	r.Methods = []string{"Ping", "StopServing", "TestMore"}
-	return r
+	return Interface{InterfaceDefinition: NewInterfaceDefinition()}
 }
