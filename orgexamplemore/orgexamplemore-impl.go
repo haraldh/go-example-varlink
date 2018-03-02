@@ -3,6 +3,7 @@ package orgexamplemore
 import (
 	"encoding/json"
 	"github.com/varlink/go-varlink"
+	"reflect"
 )
 
 type Service struct {
@@ -56,15 +57,22 @@ func (this *Service) Ping(call varlink.ServerCall, out *varlink.Writer) error {
 }
 
 func (this *Service) Handle(method string, call varlink.ServerCall, out *varlink.Writer) error {
-	switch method {
-	case "Ping":
-		return this.Ping(call, out)
-	case "TestMore":
-		return this.TestMore(call, out)
-	case "StopServing":
-		return this.StopServing(call, out)
+	// FIXME: add list of methods to generated  file and check
+	// that the method is defined (not only implemented here)
+
+	// MethodByName() returns 'zero Kind' for unknown methods
+	v := reflect.ValueOf(this).MethodByName(method)
+	if v.Kind() != reflect.Func {
+		varlink.MethodNotFound(method, out)
 	}
-	return varlink.MethodNotFound(method, out)
+
+	args := []reflect.Value{
+		reflect.ValueOf(call),
+		reflect.ValueOf(out),
+	}
+	ret := v.Call(args)
+
+	return ret[0].Interface().(error)
 }
 
 func NewService() Service {
