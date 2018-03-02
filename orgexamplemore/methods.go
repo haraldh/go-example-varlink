@@ -12,7 +12,11 @@ type Interface struct {
 	Server *varlink.Service
 }
 
-func (this *Interface) TestMore(call varlink.ServerCall, out *varlink.Writer) error {
+func NewInterface() Interface {
+	return Interface{InterfaceDefinition: NewInterfaceDefinition()}
+}
+
+func (this *Interface) TestMore(call *varlink.ServerCall, out *varlink.Writer) error {
 	var in TestMore_In
 	err := json.Unmarshal(*call.Parameters, &in)
 	if err != nil {
@@ -29,14 +33,14 @@ func (this *Interface) TestMore(call varlink.ServerCall, out *varlink.Writer) er
 	})
 }
 
-func (this *Interface) StopServing(call varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) StopServing(call *varlink.ServerCall, out *varlink.Writer) error {
 	if this.Server != nil {
 		this.Server.Stop()
 	}
 	return out.Reply(varlink.ServerReply{})
 }
 
-func (this *Interface) Ping(call varlink.ServerCall, out *varlink.Writer) error {
+func (this *Interface) Ping(call *varlink.ServerCall, out *varlink.Writer) error {
 	var in Ping_In
 	if call.Parameters == nil {
 		return varlink.InvalidParameter("parameters", out)
@@ -52,8 +56,4 @@ func (this *Interface) Ping(call varlink.ServerCall, out *varlink.Writer) error 
 			in.Ping,
 		},
 	})
-}
-
-func NewInterface() Interface {
-	return Interface{InterfaceDefinition: NewInterfaceDefinition()}
 }
