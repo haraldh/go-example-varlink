@@ -25,9 +25,9 @@ func (this *Interface) TestMore(ctx varlink.Context) error {
 	// FIXME: Fill me in
 	return varlink.MethodNotImplemented(ctx, "TestMore")
 
-	return ctx.Reply(&varlink.ServerReply{
+	return ctx.Reply(&varlink.ServerOut{
 		Parameters: TestMore_Out{
-			// FIXME: Fill me in
+		// FIXME: Fill me in
 		},
 	})
 }
@@ -36,7 +36,7 @@ func (this *Interface) StopServing(ctx varlink.Context) error {
 	if this.Server != nil {
 		this.Server.Stop()
 	}
-	return ctx.Reply(&varlink.ServerReply{})
+	return ctx.Reply(&varlink.ServerOut{})
 }
 
 func (this *Interface) Ping(ctx varlink.Context) error {
@@ -47,7 +47,7 @@ func (this *Interface) Ping(ctx varlink.Context) error {
 		return varlink.InvalidParameter(ctx, "parameters")
 	}
 
-	return ctx.Reply(&varlink.ServerReply{
+	return ctx.Reply(&varlink.ServerOut{
 		Parameters: Ping_Out{
 			in.Ping,
 		},
@@ -55,7 +55,7 @@ func (this *Interface) Ping(ctx varlink.Context) error {
 }
 
 func ActionFailed(ctx varlink.Context, reason string) error {
-	return ctx.Reply(&varlink.ServerReply{
+	return ctx.Reply(&varlink.ServerOut{
 		Error: "org.example.more.ActionFailed",
 		Parameters: ActionFailed_Error{
 			Reason: reason,
