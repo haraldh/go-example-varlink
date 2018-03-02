@@ -57,13 +57,10 @@ func (this *Service) Ping(call varlink.ServerCall, out *varlink.Writer) error {
 }
 
 func (this *Service) Handle(method string, call varlink.ServerCall, out *varlink.Writer) error {
-	// FIXME: add list of methods to generated  file and check
-	// that the method is defined (not only implemented here)
-
 	// MethodByName() returns 'zero Kind' for unknown methods
 	v := reflect.ValueOf(this).MethodByName(method)
 	if v.Kind() != reflect.Func {
-		varlink.MethodNotFound(method, out)
+		return varlink.MethodNotFound(method, out)
 	}
 
 	args := []reflect.Value{
@@ -72,14 +69,19 @@ func (this *Service) Handle(method string, call varlink.ServerCall, out *varlink
 	}
 	ret := v.Call(args)
 
+	if ret[0].Interface() == nil {
+		return nil
+	}
+
 	return ret[0].Interface().(error)
 }
 
 func NewService() Service {
 	r := Service{
 		InterfaceImpl: varlink.InterfaceImpl{
-			Name: "org.example.more",
+			Name:        "org.example.more",
 			Description: InterfaceDescription,
+			Methods:     []string{"Ping", "StopServing", "TestMore"},
 		},
 	}
 	return r
