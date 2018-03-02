@@ -53,3 +53,12 @@ func (this *Interface) Ping(ctx varlink.Context) error {
 		},
 	})
 }
+
+func ActionFailed(ctx varlink.Context, reason string) error {
+	return ctx.Reply(&varlink.ServerReply{
+		Error: "org.example.more.ActionFailed",
+		Parameters: ActionFailed_Error{
+			Reason: reason,
+		},
+	})
+}
