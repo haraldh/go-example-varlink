@@ -1,4 +1,5 @@
 all:
+	@go install github.com/varlink/go-varlink/varlink-generator
 	@(cd orgexamplemore && go generate)
 	@go build -o service
 .PHONY: all
