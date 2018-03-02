@@ -2,9 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/haraldh/go-varlink-example/orgexamplemore"
 	"github.com/varlink/go-varlink"
 	"os"
-	"github.com/haraldh/go-varlink-example/orgexamplemore"
 )
 
 func help(name string) {

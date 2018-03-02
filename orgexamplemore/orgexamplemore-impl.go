@@ -19,6 +19,7 @@ func (this *Service) TestMore(call varlink.ServerCall, out *varlink.Writer) erro
 	}
 
 	// FIXME: Fill me in
+	return varlink.MethodNotImplemented("TestMore", out)
 
 	retval := TestMore_Out{
 		// FIXME: Fill me in
