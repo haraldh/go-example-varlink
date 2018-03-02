@@ -3,7 +3,6 @@ package orgexamplemore
 import (
 	"encoding/json"
 	"github.com/varlink/go-varlink"
-	"reflect"
 )
 
 type Interface struct {
@@ -57,45 +56,8 @@ func (this *Interface) Ping(call varlink.ServerCall, out *varlink.Writer) error 
 	})
 }
 
-func (this *Interface) HandleOld(method string, call varlink.ServerCall, out *varlink.Writer) error {
-	switch method {
-	case "Ping":
-		return this.Ping(call, out)
-	case "StopServing":
-		return this.StopServing(call, out)
-	case "TestMore":
-		return this.TestMore(call, out)
-	}
-	return varlink.MethodNotFound(method, out)
-}
-
-func (this *Interface) Handle(method string, call varlink.ServerCall, out *varlink.Writer) error {
-	// MethodByName() returns 'zero Kind' for unknown methods
-	v := reflect.ValueOf(this).MethodByName(method)
-	if v.Kind() != reflect.Func {
-		return varlink.MethodNotFound(method, out)
-	}
-
-	args := []reflect.Value{
-		reflect.ValueOf(call),
-		reflect.ValueOf(out),
-	}
-	ret := v.Call(args)
-
-	if ret[0].Interface() == nil {
-		return nil
-	}
-
-	return ret[0].Interface().(error)
-}
-
 func NewInterface() Interface {
-	r := Interface{
-		InterfaceDefinition: varlink.InterfaceDefinition{
-			Name:        "org.example.more",
-			Description: InterfaceDescription,
-			Methods:     []string{"Ping", "StopServing", "TestMore"},
-		},
-	}
+	r := Interface{InterfaceDefinition: NewInterfaceDefinition()}
+	r.Methods = []string{"Ping", "StopServing", "TestMore"}
 	return r
 }
