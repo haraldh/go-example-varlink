@@ -17,7 +17,7 @@ func NewInterface() Interface {
 
 func (this *Interface) TestMore(call varlink.Call) error {
 	var in TestMore_In
-	err := call.Parameters(&in)
+	err := call.GetParameters(&in)
 	if err != nil {
 		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
@@ -42,7 +42,7 @@ func (this *Interface) StopServing(call varlink.Call) error {
 func (this *Interface) Ping(call varlink.Call) error {
 	var in Ping_In
 
-	err := call.Parameters(&in)
+	err := call.GetParameters(&in)
 	if err != nil {
 		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
