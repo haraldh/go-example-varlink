@@ -15,7 +15,7 @@ func NewInterface() Interface {
 	return Interface{InterfaceDefinition: NewInterfaceDefinition()}
 }
 
-func (this *Interface) TestMore(call varlink.Call) error {
+func (intf *Interface) TestMore(call varlink.Call) error {
 	var in TestMore_In
 	err := call.GetParameters(&in)
 	if err != nil {
@@ -32,14 +32,14 @@ func (this *Interface) TestMore(call varlink.Call) error {
 	})
 }
 
-func (this *Interface) StopServing(call varlink.Call) error {
-	if this.Server != nil {
-		this.Server.Stop()
+func (intf *Interface) StopServing(call varlink.Call) error {
+	if intf.Server != nil {
+		intf.Server.Stop()
 	}
 	return call.Reply(&varlink.ServerOut{})
 }
 
-func (this *Interface) Ping(call varlink.Call) error {
+func (intf *Interface) Ping(call varlink.Call) error {
 	var in Ping_In
 
 	err := call.GetParameters(&in)
