@@ -15,39 +15,39 @@ func NewInterface() Interface {
 	return Interface{InterfaceDefinition: NewInterfaceDefinition()}
 }
 
-func (this *Interface) TestMore(ctx varlink.Context) error {
+func (this *Interface) TestMore(call varlink.Call) error {
 	var in TestMore_In
-	err := ctx.Parameters(&in)
+	err := call.Parameters(&in)
 	if err != nil {
-		return ctx.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
+		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
 	// FIXME: Fill me in
-	return ctx.ReplyError("org.varlink.service.MethodNotImplemented", varlink.MethodNotImplemented_Error{Method: "TestMore"})
+	return call.ReplyError("org.varlink.service.MethodNotImplemented", varlink.MethodNotImplemented_Error{Method: "TestMore"})
 
-	return ctx.Reply(&varlink.ServerOut{
+	return call.Reply(&varlink.ServerOut{
 		Parameters: TestMore_Out{
 		// FIXME: Fill me in
 		},
 	})
 }
 
-func (this *Interface) StopServing(ctx varlink.Context) error {
+func (this *Interface) StopServing(call varlink.Call) error {
 	if this.Server != nil {
 		this.Server.Stop()
 	}
-	return ctx.Reply(&varlink.ServerOut{})
+	return call.Reply(&varlink.ServerOut{})
 }
 
-func (this *Interface) Ping(ctx varlink.Context) error {
+func (this *Interface) Ping(call varlink.Call) error {
 	var in Ping_In
 
-	err := ctx.Parameters(&in)
+	err := call.Parameters(&in)
 	if err != nil {
-		return ctx.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
+		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	return ctx.Reply(&varlink.ServerOut{
+	return call.Reply(&varlink.ServerOut{
 		Parameters: Ping_Out{
 			in.Ping,
 		},
