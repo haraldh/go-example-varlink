@@ -17,19 +17,13 @@ func NewInterface() Interface {
 
 func (this *Interface) TestMore(ctx varlink.Context) error {
 	var in TestMore_In
-	err := ctx.Args(&in)
+	err := ctx.Parameters(&in)
 	if err != nil {
-		return ctx.Reply(&varlink.ServerOut{
-			Error:      "org.varlink.service.InvalidParameter",
-			Parameters: varlink.InvalidParameter_Error{Parameter: "parameters"},
-		})
+		return ctx.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
 	// FIXME: Fill me in
-	return ctx.Reply(&varlink.ServerOut{
-		Error:      "org.varlink.service.MethodNotImplemented",
-		Parameters: varlink.MethodNotImplemented_Error{Method: "TestMore"},
-	})
+	return ctx.ReplyError("org.varlink.service.MethodNotImplemented", varlink.MethodNotImplemented_Error{Method: "TestMore"})
 
 	return ctx.Reply(&varlink.ServerOut{
 		Parameters: TestMore_Out{
@@ -48,26 +42,14 @@ func (this *Interface) StopServing(ctx varlink.Context) error {
 func (this *Interface) Ping(ctx varlink.Context) error {
 	var in Ping_In
 
-	err := ctx.Args(&in)
+	err := ctx.Parameters(&in)
 	if err != nil {
-		return ctx.Reply(&varlink.ServerOut{
-			Error:      "org.varlink.service.InvalidParameter",
-			Parameters: varlink.InvalidParameter_Error{Parameter: "parameters"},
-		})
+		return ctx.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
 	return ctx.Reply(&varlink.ServerOut{
 		Parameters: Ping_Out{
 			in.Ping,
-		},
-	})
-}
-
-func ActionFailed(ctx varlink.Context, reason string) error {
-	return ctx.Reply(&varlink.ServerOut{
-		Error: "org.example.more.ActionFailed",
-		Parameters: ActionFailed_Error{
-			Reason: reason,
 		},
 	})
 }
