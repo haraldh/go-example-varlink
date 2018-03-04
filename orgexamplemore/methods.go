@@ -3,7 +3,7 @@ package orgexamplemore
 //go:generate $GOPATH/bin/varlink-generator ./org.example.more.varlink
 
 import (
-	"github.com/varlink/go-varlink"
+	"github.com/varlink/go/varlink"
 )
 
 type Interface struct {

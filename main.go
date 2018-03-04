@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/haraldh/go-varlink-example/orgexamplemore"
-	"github.com/varlink/go-varlink"
+	"github.com/varlink/go/varlink"
 	"os"
 )
 
