@@ -4,6 +4,7 @@ package orgexamplemore
 
 import (
 	"github.com/varlink/go/varlink"
+	"time"
 )
 
 type Interface struct {
@@ -22,14 +23,28 @@ func (intf *Interface) TestMore(call varlink.Call) error {
 		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	// FIXME: Fill me in
-	return call.ReplyError("org.varlink.service.MethodNotImplemented", varlink.MethodNotImplemented_Error{Method: "TestMore"})
+	call.Reply(&varlink.ServiceOut{
+		Continues:  true,
+		Parameters: TestMore_Out{State: State{Start: true}},
+	})
+
+	for i := int64(0); i < in.N; i++ {
+		call.Reply(&varlink.ServiceOut{
+			Continues:  true,
+			Parameters: TestMore_Out{State: State{Progress: int64(i * 100 / in.N)}},
+		})
+		time.Sleep(time.Second)
+	}
+	call.Reply(&varlink.ServiceOut{
+		Continues:  true,
+		Parameters: TestMore_Out{State: State{Progress: int64(100)}},
+	})
 
 	return call.Reply(&varlink.ServiceOut{
-		Parameters: TestMore_Out{
-		// FIXME: Fill me in
-		},
+		Continues:  false,
+		Parameters: TestMore_Out{State: State{End: true}},
 	})
+
 }
 
 func (intf *Interface) StopServing(call varlink.Call) error {
