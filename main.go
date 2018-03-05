@@ -29,7 +29,7 @@ func main() {
 	}
 
 	// fill in extra data, for the StopServing() method
-	orgexamplemoreInterface.Server = &service
+	orgexamplemoreInterface.Service = &service
 
 	err := service.Run(os.Args[1])
 	if err != nil {

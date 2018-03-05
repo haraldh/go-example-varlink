@@ -8,7 +8,7 @@ import (
 
 type Interface struct {
 	varlink.InterfaceDefinition
-	Server *varlink.Service
+	Service *varlink.Service
 }
 
 func NewInterface() Interface {
@@ -25,7 +25,7 @@ func (intf *Interface) TestMore(call varlink.Call) error {
 	// FIXME: Fill me in
 	return call.ReplyError("org.varlink.service.MethodNotImplemented", varlink.MethodNotImplemented_Error{Method: "TestMore"})
 
-	return call.Reply(&varlink.ServerOut{
+	return call.Reply(&varlink.ServiceOut{
 		Parameters: TestMore_Out{
 		// FIXME: Fill me in
 		},
@@ -33,10 +33,10 @@ func (intf *Interface) TestMore(call varlink.Call) error {
 }
 
 func (intf *Interface) StopServing(call varlink.Call) error {
-	if intf.Server != nil {
-		intf.Server.Stop()
+	if intf.Service != nil {
+		intf.Service.Stop()
 	}
-	return call.Reply(&varlink.ServerOut{})
+	return call.Reply(&varlink.ServiceOut{})
 }
 
 func (intf *Interface) Ping(call varlink.Call) error {
@@ -47,7 +47,7 @@ func (intf *Interface) Ping(call varlink.Call) error {
 		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	return call.Reply(&varlink.ServerOut{
+	return call.Reply(&varlink.ServiceOut{
 		Parameters: Ping_Out{
 			in.Ping,
 		},
