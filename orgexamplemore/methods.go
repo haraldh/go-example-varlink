@@ -39,9 +39,12 @@ func (intf *Interface) TestMore(call varlink.Call) error {
 
 	for i := int64(0); i < in.N; i++ {
 		if err := call.Reply(&varlink.ServiceOut{
-			Continues:  true,
-			Parameters: TestMore_Out{State: State{Progress: int64(i * 100 / in.N)}},
-		}); err != nil {
+			Continues: true,
+			Parameters: struct {
+				State interface{} `json:"state"`
+			}{State: struct {
+				Progress int64 `json:"progress"`
+			}{Progress: int64(i * 100 / in.N)}}}); err != nil {
 			return err
 		}
 		time.Sleep(time.Second)
