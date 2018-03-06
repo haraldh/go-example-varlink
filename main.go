@@ -21,40 +21,47 @@ func (m *more) TestMore(call varlink.Call) error {
 	}
 
 	var in orgexamplemore.TestMore_In
-	if err := call.GetParameters(&in); err != nil {
+	var err error
+
+	err = call.GetParameters(&in)
+	if err != nil {
 		return call.ReplyError("org.varlink.service.InvalidParameter",
 			varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	if err := call.Reply(&varlink.ServiceOut{Continues: true,
+	err = call.Reply(&varlink.ServiceOut{
+		Continues: true,
 		Parameters: struct {
 			State interface{} `json:"state"`
 		}{State: struct {
 			Start bool `json:"start"`
-		}{Start: true}}}); err != nil {
+		}{Start: true}}})
+	if err != nil {
 		return err
 	}
 
 	for i := int64(0); i < in.N; i++ {
-		if err := call.Reply(&varlink.ServiceOut{
+		err = call.Reply(&varlink.ServiceOut{
 			Continues: true,
 			Parameters: struct {
 				State interface{} `json:"state"`
 			}{State: struct {
 				Progress int64 `json:"progress"`
-			}{Progress: int64(i * 100 / in.N)}}}); err != nil {
+			}{Progress: int64(i * 100 / in.N)}}})
+		if err != nil {
 			return err
 		}
 		time.Sleep(time.Second)
 	}
 
-	if err := call.Reply(&varlink.ServiceOut{
+	err = call.Reply(&varlink.ServiceOut{
 		Continues: true,
 		Parameters: struct {
 			State interface{} `json:"state"`
 		}{State: struct {
 			Progress int64 `json:"progress"`
-		}{Progress: int64(100)}}}); err != nil {
+		}{Progress: int64(100)}}})
+	if err != nil {
 		return err
 	}
 
