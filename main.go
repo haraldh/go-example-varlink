@@ -74,7 +74,8 @@ func (m *more) StopServing(call varlink.Call) error {
 
 func (m *more) Ping(call varlink.Call) error {
 	var in orgexamplemore.Ping_In
-
+	m.mycounter++
+	fmt.Println(m.mycounter)
 	err := call.GetParameters(&in)
 	if err != nil {
 		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
@@ -104,7 +105,11 @@ func main() {
 		"1",
 		"https://github.com/haraldh/go-varlink-example",
 	)
-	service.RegisterInterface(&m)
+	service.RegisterInterface(&m, varlink.MethodMap{
+		"TestMore":    m.TestMore,
+		"StopServing": m.StopServing,
+		"Ping":        m.Ping,
+	})
 
 	if len(os.Args) < 2 {
 		help(os.Args[0])
