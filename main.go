@@ -9,7 +9,7 @@ import (
 )
 
 type more struct {
-	varlink.Implementation
+	varlink.Interface
 	mycounter int64
 	moredata  string
 }
@@ -96,17 +96,15 @@ func help(name string) {
 var service varlink.Service
 
 func main() {
-	m := more{Implementation: orgexamplemore.New()}
+	m := more{Interface: orgexamplemore.New()}
 
 	service = varlink.NewService(
 		"Varlink",
 		"Example",
 		"1",
 		"https://github.com/haraldh/go-varlink-example",
-		[]varlink.Interface{
-			&m,
-		},
 	)
+	service.RegisterInterface(&m)
 
 	if len(os.Args) < 2 {
 		help(os.Args[0])
