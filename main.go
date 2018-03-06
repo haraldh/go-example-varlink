@@ -9,7 +9,7 @@ import (
 )
 
 type more struct {
-	varlink.Interface
+	varlink.Implementation
 	mycounter int64
 	moredata  string
 }
@@ -96,14 +96,14 @@ func help(name string) {
 var service varlink.Service
 
 func main() {
-	m := more{Interface: orgexamplemore.New()}
+	m := more{Implementation: orgexamplemore.New()}
 
 	service = varlink.NewService(
 		"Varlink",
 		"Example",
 		"1",
 		"https://github.com/haraldh/go-varlink-example",
-		[]varlink.API{
+		[]varlink.Interface{
 			&m,
 		},
 	)
