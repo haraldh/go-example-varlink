@@ -11,7 +11,7 @@ import (
 type more struct {
 	varlink.Interface
 	mycounter int64
-	moredata string
+	moredata  string
 }
 
 func NewMore() more {
@@ -97,10 +97,10 @@ func help(name string) {
 }
 
 // global only for the method StopServing
-var	service varlink.Service
+var service varlink.Service
 
 func main() {
-	 m := NewMore()
+	m := NewMore()
 
 	service = varlink.NewService(
 		"Varlink",
