@@ -8,18 +8,17 @@ import (
 	"time"
 )
 
-type More struct {
+type more struct {
 	varlink.Interface
 	mycounter int64
 	moredata string
-	Service *varlink.Service
 }
 
-func NewMore() More {
-	return More{Interface: orgexamplemore.NewVarlinkInterface()}
+func NewMore() more {
+	return more{Interface: orgexamplemore.New()}
 }
 
-func (more *More) TestMore(call varlink.Call) error {
+func (m *more) TestMore(call varlink.Call) error {
 	if !call.WantsMore() {
 		return call.ReplyError("org.varlink.service.InvalidParameter",
 			varlink.InvalidParameter_Error{Parameter: "more"})
@@ -72,14 +71,12 @@ func (more *More) TestMore(call varlink.Call) error {
 		}{Start: true}}})
 }
 
-func (more *More) StopServing(call varlink.Call) error {
-	if more.Service != nil {
-		more.Service.Stop()
-	}
+func (m *more) StopServing(call varlink.Call) error {
+	service.Stop()
 	return call.Reply(&varlink.ServiceOut{})
 }
 
-func (more *More) Ping(call varlink.Call) error {
+func (m *more) Ping(call varlink.Call) error {
 	var in orgexamplemore.Ping_In
 
 	err := call.GetParameters(&in)
@@ -99,24 +96,25 @@ func help(name string) {
 	os.Exit(1)
 }
 
+// global only for the method StopServing
+var	service varlink.Service
+
 func main() {
-	more := NewMore()
-	service := varlink.NewService(
+	 m := NewMore()
+
+	service = varlink.NewService(
 		"Varlink",
 		"Example",
 		"1",
 		"https://github.com/haraldh/go-varlink-example",
 		[]varlink.API{
-			&more,
+			&m,
 		},
 	)
 
 	if len(os.Args) < 2 {
 		help(os.Args[0])
 	}
-
-	// fill in extra data, for the StopServing() method
-	more.Service = &service
 
 	err := service.Run(os.Args[1])
 	if err != nil {
