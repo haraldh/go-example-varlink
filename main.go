@@ -14,10 +14,6 @@ type more struct {
 	moredata  string
 }
 
-func NewMore() more {
-	return more{Interface: orgexamplemore.New()}
-}
-
 func (m *more) TestMore(call varlink.Call) error {
 	if !call.WantsMore() {
 		return call.ReplyError("org.varlink.service.InvalidParameter",
@@ -100,7 +96,7 @@ func help(name string) {
 var service varlink.Service
 
 func main() {
-	m := NewMore()
+	m := more{Interface: orgexamplemore.New()}
 
 	service = varlink.NewService(
 		"Varlink",
