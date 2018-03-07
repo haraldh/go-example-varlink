@@ -59,18 +59,16 @@ func (m *more) TestMore(call varlink.Call) error {
 		return err
 	}
 
-	return call.Reply(&varlink.ServiceReply{
-		Continues: false,
-		Parameters: struct {
+	return call.Reply(&struct{
 			State interface{} `json:"state"`
 		}{State: struct {
 			Start bool `json:"end"`
-		}{Start: true}}})
+		}{Start: true}})
 }
 
 func (m *more) StopServing(call varlink.Call) error {
 	service.Stop()
-	return call.Reply(&varlink.ServiceReply{})
+	return call.Reply(nil)
 }
 
 func (m *more) Ping(call varlink.Call) error {
@@ -82,11 +80,7 @@ func (m *more) Ping(call varlink.Call) error {
 		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	return call.Reply(&varlink.ServiceReply{
-		Parameters: orgexamplemore.Ping_Out{
-			in.Ping,
-		},
-	})
+	return call.Reply(&orgexamplemore.Ping_Out{in.Ping})
 }
 
 func help(name string) {
