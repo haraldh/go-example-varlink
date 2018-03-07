@@ -29,7 +29,7 @@ func (m *more) TestMore(call varlink.Call) error {
 			varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	err = call.Reply(&varlink.ServiceOut{
+	err = call.Reply(&varlink.ServiceReply{
 		Continues: true,
 		Parameters: struct {
 			State interface{} `json:"state"`
@@ -41,7 +41,7 @@ func (m *more) TestMore(call varlink.Call) error {
 	}
 
 	for i := int64(0); i < in.N; i++ {
-		err = call.Reply(&varlink.ServiceOut{
+		err = call.Reply(&varlink.ServiceReply{
 			Continues: true,
 			Parameters: struct {
 				State interface{} `json:"state"`
@@ -54,7 +54,7 @@ func (m *more) TestMore(call varlink.Call) error {
 		time.Sleep(time.Second)
 	}
 
-	err = call.Reply(&varlink.ServiceOut{
+	err = call.Reply(&varlink.ServiceReply{
 		Continues: true,
 		Parameters: struct {
 			State interface{} `json:"state"`
@@ -65,7 +65,7 @@ func (m *more) TestMore(call varlink.Call) error {
 		return err
 	}
 
-	return call.Reply(&varlink.ServiceOut{
+	return call.Reply(&varlink.ServiceReply{
 		Continues: false,
 		Parameters: struct {
 			State interface{} `json:"state"`
@@ -76,7 +76,7 @@ func (m *more) TestMore(call varlink.Call) error {
 
 func (m *more) StopServing(call varlink.Call) error {
 	service.Stop()
-	return call.Reply(&varlink.ServiceOut{})
+	return call.Reply(&varlink.ServiceReply{})
 }
 
 func (m *more) Ping(call varlink.Call) error {
@@ -88,7 +88,7 @@ func (m *more) Ping(call varlink.Call) error {
 		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	return call.Reply(&varlink.ServiceOut{
+	return call.Reply(&varlink.ServiceReply{
 		Parameters: orgexamplemore.Ping_Out{
 			in.Ping,
 		},
