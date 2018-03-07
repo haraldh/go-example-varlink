@@ -16,8 +16,7 @@ type more struct {
 
 func (m *more) TestMore(call varlink.Call) error {
 	if !call.WantsMore() {
-		return call.ReplyError("org.varlink.service.InvalidParameter",
-			varlink.InvalidParameter_Error{Parameter: "more"})
+		return call.ReplyInvalidParameter("more")
 	}
 
 	var in orgexamplemore.TestMore_In
@@ -25,8 +24,7 @@ func (m *more) TestMore(call varlink.Call) error {
 
 	err = call.GetParameters(&in)
 	if err != nil {
-		return call.ReplyError("org.varlink.service.InvalidParameter",
-			varlink.InvalidParameter_Error{Parameter: "parameters"})
+		return call.ReplyInvalidParameter("parameters")
 	}
 
 	err = call.ReplyContinues(&struct {
@@ -77,7 +75,7 @@ func (m *more) Ping(call varlink.Call) error {
 	fmt.Println(m.mycounter)
 	err := call.GetParameters(&in)
 	if err != nil {
-		return call.ReplyError("org.varlink.service.InvalidParameter", varlink.InvalidParameter_Error{Parameter: "parameters"})
+		return call.ReplyInvalidParameter("parameters")
 	}
 
 	return call.Reply(&orgexamplemore.Ping_Out{in.Ping})
