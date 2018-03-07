@@ -29,38 +29,32 @@ func (m *more) TestMore(call varlink.Call) error {
 			varlink.InvalidParameter_Error{Parameter: "parameters"})
 	}
 
-	err = call.Reply(&varlink.ServiceReply{
-		Continues: true,
-		Parameters: struct {
+	err = call.ReplyContinues(&struct {
 			State interface{} `json:"state"`
 		}{State: struct {
 			Start bool `json:"start"`
-		}{Start: true}}})
+		}{Start: true}})
 	if err != nil {
 		return err
 	}
 
 	for i := int64(0); i < in.N; i++ {
-		err = call.Reply(&varlink.ServiceReply{
-			Continues: true,
-			Parameters: struct {
+		err = call.ReplyContinues(&struct {
 				State interface{} `json:"state"`
 			}{State: struct {
 				Progress int64 `json:"progress"`
-			}{Progress: int64(i * 100 / in.N)}}})
+			}{Progress: int64(i * 100 / in.N)}})
 		if err != nil {
 			return err
 		}
 		time.Sleep(time.Second)
 	}
 
-	err = call.Reply(&varlink.ServiceReply{
-		Continues: true,
-		Parameters: struct {
+	err = call.ReplyContinues(&struct{
 			State interface{} `json:"state"`
 		}{State: struct {
 			Progress int64 `json:"progress"`
-		}{Progress: int64(100)}}})
+		}{Progress: int64(100)}})
 	if err != nil {
 		return err
 	}
