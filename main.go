@@ -9,76 +9,75 @@ import (
 )
 
 type more struct {
-	varlink.Interface
+	orgexamplemore.VarlinkInterface
 	mycounter int64
 	moredata  string
 }
 
-func (m *more) TestMore(call varlink.Call) error {
+func (m *more) Ping(call orgexamplemore.VarlinkCall, ping string) error {
+	m.mycounter++
+	pong := fmt.Sprintf("%d: %s", m.mycounter, ping)
+	return call.ReplyPing(pong)
+}
+
+func (m *more) StopServing(call orgexamplemore.VarlinkCall) error {
+	service.Stop()
+	return call.ReplyStopServing()
+}
+
+func (m *more) TestMore(call orgexamplemore.VarlinkCall, n int64) error {
 	if !call.WantsMore() {
 		return call.ReplyInvalidParameter("more")
 	}
 
-	var in orgexamplemore.TestMore_In
-	var err error
-
-	err = call.GetParameters(&in)
-	if err != nil {
-		return call.ReplyInvalidParameter("parameters")
+	if n > 10 {
+		return call.ReplyTestMoreError("n is too big")
 	}
 
-	err = call.ReplyContinues(&struct {
-			State interface{} `json:"state"`
-		}{State: struct {
-			Start bool `json:"start"`
-		}{Start: true}})
+	var err error
+
+	call.Continues = true
+
+	err = call.Reply(&struct {
+		State interface{} `json:"state"`
+	}{State: struct {
+		Start bool `json:"start"`
+	}{Start: true}})
+
 	if err != nil {
 		return err
 	}
 
-	for i := int64(0); i < in.N; i++ {
-		err = call.ReplyContinues(&struct {
-				State interface{} `json:"state"`
-			}{State: struct {
-				Progress int64 `json:"progress"`
-			}{Progress: int64(i * 100 / in.N)}})
+	for i := int64(0); i < n; i++ {
+		err = call.Reply(&struct {
+			State interface{} `json:"state"`
+		}{State: struct {
+			Progress int64 `json:"progress"`
+		}{Progress: int64(i * 100 / n)}})
+
 		if err != nil {
 			return err
 		}
 		time.Sleep(time.Second)
 	}
 
-	err = call.ReplyContinues(&struct{
-			State interface{} `json:"state"`
-		}{State: struct {
-			Progress int64 `json:"progress"`
-		}{Progress: int64(100)}})
+	err = call.Reply(&struct {
+		State interface{} `json:"state"`
+	}{State: struct {
+		Progress int64 `json:"progress"`
+	}{Progress: int64(100)}})
+
 	if err != nil {
 		return err
 	}
 
-	return call.Reply(&struct{
-			State interface{} `json:"state"`
-		}{State: struct {
-			Start bool `json:"end"`
-		}{Start: true}})
-}
+	call.Continues = false
 
-func (m *more) StopServing(call varlink.Call) error {
-	service.Stop()
-	return call.Reply(nil)
-}
-
-func (m *more) Ping(call varlink.Call) error {
-	var in orgexamplemore.Ping_In
-	m.mycounter++
-	fmt.Println(m.mycounter)
-	err := call.GetParameters(&in)
-	if err != nil {
-		return call.ReplyInvalidParameter("parameters")
-	}
-
-	return call.Reply(&orgexamplemore.Ping_Out{in.Ping})
+	return call.Reply(&struct {
+		State interface{} `json:"state"`
+	}{State: struct {
+		Start bool `json:"end"`
+	}{Start: true}})
 }
 
 func help(name string) {
@@ -87,10 +86,10 @@ func help(name string) {
 }
 
 // global only for the method StopServing
-var service varlink.Service
+var service *varlink.Service
 
 func main() {
-	m := more{Interface: orgexamplemore.New()}
+	m := more{mycounter: 1, moredata: "test"}
 
 	service = varlink.NewService(
 		"Varlink",
@@ -98,11 +97,10 @@ func main() {
 		"1",
 		"https://github.com/haraldh/go-varlink-example",
 	)
-	service.RegisterInterface(&m, varlink.MethodMap{
-		"TestMore":    m.TestMore,
-		"StopServing": m.StopServing,
-		"Ping":        m.Ping,
-	})
+
+	service.RegisterInterface(orgexamplemore.VarlinkNew(&m))
+
+	m.mycounter = 2
 
 	if len(os.Args) < 2 {
 		help(os.Args[0])

@@ -19,5 +19,5 @@ method TestMore(n: int) -> (state: State)
 # Stop serving
 method StopServing() -> ()
 
-# Something failed
-error ActionFailed (reason: string)
+# Something failed in TestMore
+error TestMoreError (reason: string)
