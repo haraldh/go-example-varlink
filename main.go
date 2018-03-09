@@ -120,8 +120,10 @@ func main() {
 		help(os.Args[0])
 	}
 
-	err := service.Listen(os.Args[1])
+	err := service.Listen(os.Args[1], time.Duration(10)*time.Second)
+
 	if err != nil {
+		fmt.Println(err)
 		os.Exit(1)
 	}
 }
