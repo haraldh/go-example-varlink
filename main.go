@@ -11,6 +11,8 @@ import (
 type more struct {
 	// orgexamplemore.VarlinkInterface is added to return
 	// MethodNotImplemented for not yet implemented methods
+	// If it is omitted, the compiler will check, if the implementation
+	// is complete.
 	orgexamplemore.VarlinkInterface
 	mycounter int64
 	moredata  string
