@@ -5,6 +5,7 @@ import (
 	"github.com/haraldh/go-varlink-example/orgexamplemore"
 	"github.com/varlink/go/varlink"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -14,13 +15,22 @@ type more struct {
 	// If it is omitted, the compiler will check, if the implementation
 	// is complete.
 	orgexamplemore.VarlinkInterface
+	sync.RWMutex
 	mycounter int64
 	moredata  string
 }
 
+// Ping returns the given ping string and adds an increasing counter
+// from the global more struct, which is guarded with a sync.RWMutex
 func (m *more) Ping(call orgexamplemore.VarlinkCall, ping string) error {
+	m.Lock()
 	m.mycounter++
+	m.Unlock()
+
+	m.RLock()
 	pong := fmt.Sprintf("%d: %s", m.mycounter, ping)
+	m.RUnlock()
+
 	return call.ReplyPing(pong)
 }
 
