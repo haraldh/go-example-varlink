@@ -95,7 +95,7 @@ var service *varlink.Service
 func main() {
 	m := more{mycounter: 1, moredata: "test"}
 
-	service = varlink.NewService(
+	service, _ = varlink.NewService(
 		"Varlink",
 		"Example",
 		"1",
