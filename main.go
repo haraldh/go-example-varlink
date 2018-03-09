@@ -35,7 +35,7 @@ func (m *more) Ping(call orgexamplemore.VarlinkCall, ping string) error {
 }
 
 func (m *more) StopServing(call orgexamplemore.VarlinkCall) error {
-	service.Stop()
+	service.Shutdown()
 	return call.ReplyStopServing()
 }
 
@@ -120,7 +120,7 @@ func main() {
 		help(os.Args[0])
 	}
 
-	err := service.Run(os.Args[1])
+	err := service.Listen(os.Args[1])
 	if err != nil {
 		os.Exit(1)
 	}
