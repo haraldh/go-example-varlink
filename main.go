@@ -9,6 +9,8 @@ import (
 )
 
 type more struct {
+	// orgexamplemore.VarlinkInterface is added to return
+	// MethodNotImplemented for not yet implemented methods
 	orgexamplemore.VarlinkInterface
 	mycounter int64
 	moredata  string
