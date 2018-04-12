@@ -20,7 +20,7 @@ method TestMore(n: int) -> (state: State)
 method StopServing() -> ()
 
 # Test for MethodNotImplemented
-method TestMethodNotImplemented() ->()
+method TestMethodNotImplemented() -> ()
 
 # Something failed in TestMore
 error TestMoreError (reason: string)
