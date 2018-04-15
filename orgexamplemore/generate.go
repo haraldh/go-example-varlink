@@ -1,3 +1,3 @@
 package orgexamplemore
 
-//go:generate $GOPATH/bin/varlink-generator org.example.more.varlink
+//go:generate $GOPATH/bin/varlink-go-interface-generator org.example.more.varlink

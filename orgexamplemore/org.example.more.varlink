@@ -5,7 +5,7 @@ interface org.example.more
 # progress: [0-100]
 type State (
   start: bool,
-  progress: int,
+  progress: ?int,
   end: bool
 )
 
