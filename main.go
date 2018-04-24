@@ -52,22 +52,20 @@ func (m *more) TestMore(call orgexamplemore.VarlinkCall, n int64) error {
 
 	call.Continues = true
 
-	err = call.Reply(&struct {
-		State interface{} `json:"state"`
-	}{State: struct {
-		Start bool `json:"start"`
-	}{Start: true}})
+	bstart := true
+	start := orgexamplemore.State{Start: &bstart}
+
+	err = call.ReplyTestMore(start)
 
 	if err != nil {
 		return err
 	}
 
 	for i := int64(0); i < n; i++ {
-		err = call.Reply(&struct {
-			State interface{} `json:"state"`
-		}{State: struct {
-			Progress int64 `json:"progress"`
-		}{Progress: int64(i * 100 / n)}})
+		p := int64(i * 100 / n)
+		progress := orgexamplemore.State{Progress: &p}
+
+		err = call.ReplyTestMore(progress)
 
 		if err != nil {
 			return err
@@ -75,11 +73,10 @@ func (m *more) TestMore(call orgexamplemore.VarlinkCall, n int64) error {
 		time.Sleep(time.Second)
 	}
 
-	err = call.Reply(&struct {
-		State interface{} `json:"state"`
-	}{State: struct {
-		Progress int64 `json:"progress"`
-	}{Progress: int64(100)}})
+	p := int64(100)
+	progress := orgexamplemore.State{Progress: &p}
+
+	err = call.ReplyTestMore(progress)
 
 	if err != nil {
 		return err
@@ -87,11 +84,10 @@ func (m *more) TestMore(call orgexamplemore.VarlinkCall, n int64) error {
 
 	call.Continues = false
 
-	return call.Reply(&struct {
-		State interface{} `json:"state"`
-	}{State: struct {
-		Start bool `json:"end"`
-	}{Start: true}})
+	bend := true
+	end := orgexamplemore.State{End: &bend}
+
+	return call.ReplyTestMore(end)
 }
 
 func help(name string) {
